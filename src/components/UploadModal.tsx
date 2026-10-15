@@ -163,29 +163,23 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         setUploadStatus('Fast-Upload enabled: Deferring AI summary for later generation...');
         await new Promise(r => setTimeout(r, 300));
       } else {
-        setUploadStatus('Generating AI Executive Summary using Gemini...');
+        setUploadStatus('Generating AI Executive Summary...');
         try {
-          const res = await fetch('/api/ai/summarize', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              subject,
-              category: effectiveCategory,
-              subCategory: effectiveSubCategory,
-              entity,
-              refNo,
-              date,
-              contentText: customTextContent || subject
-            })
+          const { summarizeDocument } = await import('../services/aiService');
+          const data = await summarizeDocument({
+            subject,
+            category: effectiveCategory,
+            subCategory: effectiveSubCategory,
+            entity,
+            refNo,
+            date,
+            contentText: customTextContent || subject
           });
 
-          if (res.ok) {
-            const data = await res.json();
-            finalSummary = data.summary || '';
-            keyPoints = data.keyPoints || [];
-            actionItems = data.actionItems || [];
-            tags = data.tags || tags;
-          }
+          finalSummary = data.summary || '';
+          keyPoints = data.keyPoints || [];
+          actionItems = data.actionItems || [];
+          tags = data.tags || tags;
         } catch (aiErr) {
           console.warn('AI summary generation during upload skipped, will allow regeneration later:', aiErr);
         }

@@ -174,22 +174,16 @@ export default function App() {
     if (!doc) return;
 
     try {
-      const res = await fetch('/api/ai/summarize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: doc.subject,
-          category: doc.category,
-          subCategory: doc.subCategory,
-          entity: doc.entity,
-          refNo: doc.refNo,
-          date: doc.date,
-          contentText: doc.fullContent || doc.contentSample || doc.subject
-        })
+      const { summarizeDocument } = await import('./services/aiService');
+      const data = await summarizeDocument({
+        subject: doc.subject,
+        category: doc.category,
+        subCategory: doc.subCategory,
+        entity: doc.entity,
+        refNo: doc.refNo,
+        date: doc.date,
+        contentText: doc.fullContent || doc.contentSample || doc.subject
       });
-
-      if (!res.ok) throw new Error('Summarization failed');
-      const data = await res.json();
 
       setDocuments(prev =>
         prev.map(d => {

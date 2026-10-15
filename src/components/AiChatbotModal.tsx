@@ -103,21 +103,12 @@ How may I assist you today with GTPS Ghatampur or PSOCP Dumka procurements?`,
         contentSample: d.contentSample || d.fullContent
       }));
 
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: textToSend.trim(),
-          documentsContext: docsContext,
-          history: messages.slice(-4)
-        })
+      const { chatWithGyanKosh } = await import('../services/aiService');
+      const data = await chatWithGyanKosh({
+        question: textToSend.trim(),
+        documentsContext: docsContext,
+        history: messages.slice(-4)
       });
-
-      if (!res.ok) {
-        throw new Error('Failed to get answer from AI');
-      }
-
-      const data = await res.json();
 
       const assistantMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
