@@ -1,0 +1,6 @@
+{
+  "name": "CP-Gyan Kosh - NUPPL C&P Knowledge Repository",
+  "description": "Contracts & Purchase knowledge management portal for NUPPL (Joint Venture of NLCIL & UPRVUNL) featuring circulars, manuals, AI document summaries, search, and intelligent assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
